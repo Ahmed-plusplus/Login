@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Login Screen</string>
+    <string name="email">Email:</string>
+    <string name="password">Password:</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_in">Sign in</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="success">Login Success</string>
+    <string name="enter_mail">Enter your mail</string>
+    <string name="enter_pass">Enter your password</string>
+    <string name="mail_not_exist">Your mail doesn\'t exist</string>
+    <string name="pass_not_correct">This password doesn\'t correct</string>
+    <string name="user_name">Name:</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="accepted_privacy_policy">accepted privacy policy</string>
+    <string name="register">Register</string>
+    <string name="take_cap">Take a capture</string>
+    <string name="choose_img">Choose an image</string>
+    <string name="ahmed_mostafa">Ahmed Mostafa</string>
+    <string name="ahmed_gmail_com">ahmed@gmail.com</string>
+    <string name="stars">********</string>
+    <string name="remove_img">Remove the image</string>
+    <string name="delete_account">Delete your account</string>
+    <string name="logout">Logout</string>
+</resources>

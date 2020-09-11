@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/take_capture"
+        android:title="@string/take_cap"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/choose_img"
+        android:title="@string/choose_img"
+        app:showAsAction="never"/>
+</menu>
