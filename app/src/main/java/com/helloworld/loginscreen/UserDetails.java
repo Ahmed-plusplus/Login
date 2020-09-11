@@ -92,6 +92,10 @@ public class UserDetails extends AppCompatActivity {
             name = savedInstanceState.getString(MainActivity.USERNAME);
             gen = savedInstanceState.getString(MainActivity.GENDER);
             bitmap_img = savedInstanceState.getParcelable(MainActivity.IMAGE);
+            if(bitmap_img != null){
+                img.setImageBitmap(bitmap_img);
+                img.setBackgroundColor(0);
+            }
         }
         user = new UserAuth(id,name,null,null,(gen.equals("Male"))?'M':'F',image_file);
 
