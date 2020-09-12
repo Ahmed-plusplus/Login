@@ -75,6 +75,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                new WaitProgress(RegisterActivity.this).execute();
+
 //                AlertDialog.Builder alertBuilder;
 //                final AlertDialog dialog;
 //
@@ -195,7 +197,6 @@ public class RegisterActivity extends AppCompatActivity {
 //                        endProgressAlert.sendEmptyMessage(0);
 //                    }
 //                }).start();
-                new WaitProgress(RegisterActivity.this).execute();
             }
         });
 
@@ -326,41 +327,10 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 if(username.isEmpty() || email.isEmpty() || password.isEmpty())
                     throw new Exception("Fill the empty fields");
-                            /*
-                            int index = email.indexOf("@");
 
-                            if(index == -1)
-                                throw new Exception("Invalid mail");
-
-                            String nameAddress,pathAddress;
-                            nameAddress = email.substring(0,index);
-                            pathAddress = email.substring(index+1);
-
-                            if(nameAddress.isEmpty() || pathAddress.isEmpty())
-                                throw new Exception("Invalid mail");
-
-                            for(int i=0; i<nameAddress.length(); i++)
-                                if(!(nameAddress.charAt(i)>='A' && nameAddress.charAt(i)<='Z'
-                                        || nameAddress.charAt(i)>='a' && nameAddress.charAt(i)<='z'
-                                        || nameAddress.charAt(i)>='0' && nameAddress.charAt(i)<='9'
-                                        || nameAddress.charAt(i)=='_'))
-                                    throw new Exception("Invalid mail");
-
-                            if(pathAddress.charAt(0)=='.'
-                                    || pathAddress.charAt(pathAddress.length()-1)=='.'
-                                    || !pathAddress.contains("."))
-                                throw new Exception("Invalid mail");
-
-                            for(int i=0; i<pathAddress.length()-1; i++)
-                                if (pathAddress.charAt(i)=='.' && pathAddress.charAt(i+1)=='.'
-                                    || !(pathAddress.charAt(i)>='a' && pathAddress.charAt(i)<='z' || pathAddress.charAt(i)=='.'))
-                                    throw new Exception("Invalid mail");
-                            //*/
-
-                ///*
                 if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
                     throw new Exception("Invalid mail");
-                //*/
+
                 if(password.length()<6 || password.length()>20)
                     throw new Exception("The password must have length from 6 to 20");
 
