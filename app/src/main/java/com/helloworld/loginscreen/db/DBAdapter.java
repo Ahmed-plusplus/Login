@@ -79,11 +79,7 @@ public class DBAdapter {
     }
 
     public void deleteImage(int id){
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DBHelper.COL_IMAGE,(String) null);
-        String []idSelected = {id+""};
-        db.update(DBHelper.TABLE_NAME, contentValues, DBHelper.COL_UID + " LIKE ?", idSelected);
+        updateImage(id,null);
     }
 
     public int deleteAccount(int id){
