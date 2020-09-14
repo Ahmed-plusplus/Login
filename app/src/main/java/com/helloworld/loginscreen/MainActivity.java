@@ -22,14 +22,12 @@ public class MainActivity extends AppCompatActivity {
     Button in,up;
     TextView forget;
     DBAdapter db;
-    UserAuth user;
+    public static UserAuth user;
     SharedPreferences sp;
 
     public static final String USER_ID = "ID";
-    public static final String USERNAME = "Username";
     public static final String EMAIL = "Email";
     public static final String PASS = "Pass";
-    public static final String GENDER = "Gender";
     public static final String IMAGE = "Image";
 
     @Override
@@ -40,13 +38,8 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         if(sp.getInt(USER_ID,-1)!=-1){
-            Intent intent = new Intent(this,UserDetails.class);
             user = db.getUser(sp.getInt(USER_ID,-1));
-            intent.putExtra(USER_ID,user.getId());
-            intent.putExtra(USERNAME,user.getUsername());
-            intent.putExtra(GENDER,user.getGender());
-            intent.putExtra(IMAGE,user.getImage_file());
-            startActivity(intent);
+            startActivity(new Intent(this,UserDetails.class));
             finish();
         }
 
@@ -66,12 +59,7 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putInt(USER_ID, user.getId());
                         editor.commit();
-                        Intent intent = new Intent(MainActivity.this, UserDetails.class);
-                        intent.putExtra(USER_ID, user.getId());
-                        intent.putExtra(USERNAME, user.getUsername());
-                        intent.putExtra(GENDER, user.getGender());
-                        intent.putExtra(IMAGE, user.getImage_file());
-                        startActivity(intent);
+                        startActivity(new Intent(MainActivity.this, UserDetails.class));
                         finish();
                     }else
                         Toast.makeText(MainActivity.this, getString(R.string.pass_not_correct), Toast.LENGTH_SHORT).show();
@@ -109,5 +97,11 @@ public class MainActivity extends AppCompatActivity {
             mail.setText(data.getExtras().getString(EMAIL));
             pass.setText(data.getExtras().getString(PASS));
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        db.onDestroyActivity();
+        super.onDestroy();
     }
 }

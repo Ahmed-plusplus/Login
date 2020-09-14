@@ -23,4 +23,6 @@
     <string name="remove_img">Remove the image</string>
     <string name="delete_account">Delete your account</string>
     <string name="logout">Logout</string>
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
 </resources>

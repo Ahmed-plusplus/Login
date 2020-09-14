@@ -8,26 +8,29 @@ public class UserAuth {
 
     private int id;
     private String username;
+    private String phone;
     private String mail;
     private String password;
     private char gender;
-    private String image_file;
+    private byte[] image;
 
-    public UserAuth(int id, String username, String mail, String password, char gender, String image_file) {
+    public UserAuth(int id, String username, String phone, String mail, String password, char gender, byte[] image) {
         this.id = id;
         this.username = username;
+        this.phone = phone;
         this.mail = mail;
         this.password = password;
         this.gender = gender;
-        this.image_file = image_file;
+        this.image = image;
     }
 
-    public UserAuth(String username, String mail, String password, char gender, String image_file) {
+    public UserAuth(String username, String phone, String mail, String password, char gender, byte[] image) {
         this.username = username;
+        this.phone = phone;
         this.mail = mail;
         this.password = password;
         this.gender = gender;
-        this.image_file = image_file;
+        this.image = image;
     }
 
     public int getId() {
@@ -50,17 +53,11 @@ public class UserAuth {
         return gender;
     }
 
-    public String getImage_file() {
-        return image_file;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImage_file(String image_file) {
-        this.image_file = image_file;
-    }
-
-    public static byte[] bitmapToByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,stream);
-        return stream.toByteArray();
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

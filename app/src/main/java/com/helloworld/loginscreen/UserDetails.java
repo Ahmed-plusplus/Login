@@ -36,25 +36,35 @@ public class UserDetails extends AppCompatActivity {
 
     SharedPreferences sp;
     DBAdapter db;
-    UserAuth user;
     ImageView img;
-    TextView username,gender;
-    int id;
-    String name,gen;
-    char g;
+    TextView username;
     FileInputStream fin;
     Bitmap bitmap_img;
-    String image_file;
     FileOutputStream fos;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_details);
 
         init(savedInstanceState);
 
-        registerForContextMenu(img);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(savedInstanceState == null){
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    startActivity(new Intent(UserDetails.this,UsersListActivity.class));
+                    finish();
+                }
+            }
+        }).start();
+
+        //registerForContextMenu(img);
     }
 
     private void init(Bundle savedInstanceState) {
@@ -62,45 +72,22 @@ public class UserDetails extends AppCompatActivity {
         sp = getSharedPreferences("Auth",MODE_PRIVATE);
         img = findViewById(R.id.user_img);
         username = findViewById(R.id.hello_user);
-        gender = findViewById(R.id.user_gender);
         if(savedInstanceState == null) {
-            Intent intent = getIntent();
-            id = intent.getExtras().getInt(MainActivity.USER_ID);
-            name = intent.getExtras().getString(MainActivity.USERNAME);
-            g = intent.getExtras().getChar(MainActivity.GENDER);
-            if (g == 'M')
-                gen = "Male";
-            else
-                gen = "Female";
-            image_file = intent.getExtras().getString(MainActivity.IMAGE);
-            if (image_file != null) {
-                try {
-                    fin = openFileInput(image_file);
-                    byte[] image = new byte[fin.available()];
-                    fin.read(image);
-                    bitmap_img = BitmapFactory.decodeByteArray(image, 0, image.length);
-                    img.setImageBitmap(bitmap_img);
-                    img.setBackgroundColor(0);
-                    fin.close();
-                } catch (IOException e) {
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+            if (MainActivity.user.getImage() != null) {
+                bitmap_img = BitmapFactory.decodeByteArray(MainActivity.user.getImage(), 0, MainActivity.user.getImage().length);
+                img.setImageBitmap(bitmap_img);
+                img.setBackgroundColor(0);
             } else
                 bitmap_img = null;
         }else{
-            id = savedInstanceState.getInt(MainActivity.USER_ID);
-            name = savedInstanceState.getString(MainActivity.USERNAME);
-            gen = savedInstanceState.getString(MainActivity.GENDER);
             bitmap_img = savedInstanceState.getParcelable(MainActivity.IMAGE);
             if(bitmap_img != null){
                 img.setImageBitmap(bitmap_img);
                 img.setBackgroundColor(0);
             }
         }
-        user = new UserAuth(id,name,null,null,(gen.equals("Male"))?'M':'F',image_file);
 
-        username.setText(Html.fromHtml("Hello <b><i>"+name+"</i></b>"));
-        gender.setText(Html.fromHtml("Gender: <span style=\"color:red\">"+gen+"</span>"));
+        username.setText(Html.fromHtml("Hello <b><i>"+MainActivity.user.getUsername()+"</i></b>"));
     }
 
     @Override
@@ -132,7 +119,7 @@ public class UserDetails extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if(user.getImage_file() != null)
+        if(MainActivity.user.getImage() != null)
             getMenuInflater().inflate(R.menu.img_menu_if_exists,menu);
         else
             getMenuInflater().inflate(R.menu.img_menu,menu);
@@ -155,8 +142,8 @@ public class UserDetails extends AppCompatActivity {
             case R.id.remove_img:
                 img.setImageDrawable(getDrawable(R.drawable.ic_baseline_account_box));
                 img.setBackgroundColor(getResources().getColor(android.R.color.white));
-                user.setImage_file(null);
-                db.deleteImage(user.getId());
+                MainActivity.user.setImage(null);
+                db.deleteImage(MainActivity.user.getId());
                 break;
         }
         return super.onContextItemSelected(item);
@@ -184,16 +171,9 @@ public class UserDetails extends AppCompatActivity {
             }
             img.setImageBitmap(bitmap_img);
             img.setBackgroundColor(0);
-            String img_file = System.currentTimeMillis() + "";
-            try {
-                fos = openFileOutput(img_file, MODE_PRIVATE);
-                fos.write(UserAuth.bitmapToByteArray(bitmap_img));
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            user.setImage_file(image_file);
-            db.updateImage(user.getId(),user.getImage_file());
+
+            MainActivity.user.setImage(DBAdapter.bitmapToByteArray(bitmap_img));
+            db.updateImage(MainActivity.user.getId(),MainActivity.user.getImage());
         }
     }
 
@@ -201,9 +181,6 @@ public class UserDetails extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.clear();
-        outState.putInt(MainActivity.USER_ID,id);
-        outState.putString(MainActivity.USERNAME,name);
-        outState.putString(MainActivity.GENDER,gen);
         outState.putParcelable(MainActivity.IMAGE,bitmap_img);
     }
 }
