@@ -228,8 +228,8 @@ public class UsersListActivity extends AppCompatActivity implements NavigationVi
                 startActivityForResult(intentImg,2);
                 break;
             case R.id.remove_img:
-                prof_img.setImageDrawable(getDrawable(R.drawable.ic_baseline_account_box));
-                prof_img.setBackgroundColor(getResources().getColor(android.R.color.white));
+                prof_img.setImageDrawable(getDrawable(R.drawable.ic_account_circle));
+                prof_img.setBackground(getDrawable(R.drawable.white_oval));
                 bitmap = null;
                 MainActivity.user.setImage(null);
                 db.deleteImage(MainActivity.user.getId());
