@@ -47,7 +47,7 @@ public class DBAdapter {
         contentValues.put(DBHelper.COL_E_MAIL,user.getMail());
         contentValues.put(DBHelper.COL_PASSWORD,user.getPassword());
         contentValues.put(DBHelper.COL_USER_NAME,user.getUsername());
-        contentValues.put(DBHelper.COL_PHONE,user.getUsername());
+        contentValues.put(DBHelper.COL_PHONE,user.getPhone());
         contentValues.put(DBHelper.COL_GENDER,user.getGender()+"");
         contentValues.put(DBHelper.COL_IMAGE,user.getImage());
         return db.insert(DBHelper.TABLE_NAME,null,contentValues);
@@ -151,7 +151,7 @@ public class DBAdapter {
                     + COL_E_MAIL + " TEXT UNIQUE NOT NULL, "
                     + COL_PASSWORD + " TEXT NOT NULL, "
                     + COL_USER_NAME + " TEXT NOT NULL, "
-                    + COL_PHONE + " TEXT NOT NULL, "
+                    + COL_PHONE + " TEXT UNIQUE NOT NULL, "
                     + COL_GENDER + " TEXT NOT NULL, "
                     + COL_IMAGE + " BLOB );");
         }

@@ -13,9 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".InfoActivity"/>
         <activity android:name=".UsersListActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".UserDetails" />
+        <activity android:name=".UserDetails" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".MainActivity" />

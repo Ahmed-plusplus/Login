@@ -9,8 +9,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Patterns;
 import android.view.ContextMenu;
@@ -158,11 +156,10 @@ public class RegisterActivity extends AppCompatActivity {
         outState.putParcelable(MainActivity.IMAGE,bitmap);
     }
 
-    class WaitProgress extends AsyncTask<Void,Void,Void>{
+    class WaitProgress extends AsyncTask<Void,Void,Exception>{
 
         AlertDialog.Builder alertBuilder;
         AlertDialog dialog;
-        Handler handleToast;
 
         public WaitProgress(Context context){
             alertBuilder = new AlertDialog.Builder(RegisterActivity.this);
@@ -171,13 +168,6 @@ public class RegisterActivity extends AppCompatActivity {
                     alertBuilder.setView(inflater.inflate(R.layout.wait_progress,null));
 
             dialog = alertBuilder.create();
-
-            handleToast = new Handler(){
-                @Override
-                public void handleMessage(@NonNull Message msg) {
-                    Toast.makeText(getApplicationContext(), (String)msg.obj, Toast.LENGTH_SHORT).show();
-                }
-            };
         }
 
 
@@ -188,62 +178,58 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Exception doInBackground(Void... voids) {
             String username,phone_num,email,password;
             username = name.getText().toString();
             phone_num = phone.getText().toString();
             email = mail.getText().toString();
             password = pass.getText().toString();
-            try {
-                if(username.isEmpty() || email.isEmpty() || password.isEmpty() || phone_num.isEmpty())
-                    throw new Exception("Fill the empty fields");
 
-                if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-                    throw new Exception("Invalid mail");
+            if(username.isEmpty() || email.isEmpty() || password.isEmpty() || phone_num.isEmpty())
+                return new Exception("Fill the empty fields");
 
-                if(password.length()<6 || password.length()>20)
-                    throw new Exception("The password must have length from 6 to 20");
+            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                return new Exception("Invalid mail");
 
-                if(!(male.isChecked() || female.isChecked()) || !accept.isChecked())
-                    throw new Exception("The required data isn't completed");
+            if(password.length()<6 || password.length()>20)
+                return new Exception("The password must have length from 6 to 20");
 
+            if(!(male.isChecked() || female.isChecked()) || !accept.isChecked())
+                return new Exception("The required data isn't completed");
+
+            UserAuth user;
+
+            if (bitmap != null) {
+                user = new UserAuth(username, phone_num, email, password, ((male.isChecked()) ? 'M' : 'F'), DBAdapter.bitmapToByteArray(bitmap));
+            } else
+                user = new UserAuth(username, phone_num, email, password, ((male.isChecked()) ? 'M' : 'F'), null);
+
+            if (db.addUser(user) <= 0){
                 if(db.getUser(email)!=null)
-                    throw new Exception("This mail exists, you can't register by it another time");
-
-                UserAuth user;
-
-                if (bitmap != null) {
-                    user = new UserAuth(username, phone_num, email, password, ((male.isChecked()) ? 'M' : 'F'), DBAdapter.bitmapToByteArray(bitmap));
-                } else
-                    user = new UserAuth(username, phone_num, email, password, ((male.isChecked()) ? 'M' : 'F'), null);
-
-                if (db.addUser(user) <= 0)
-                    throw new Exception("Error happened through registeration, please try again");
-
-                Message msg = new Message();
-                msg.obj = "Registeration is done successfully";
-                handleToast.sendMessage(msg);
-
-                Intent in = new Intent();
-                in.putExtra(MainActivity.EMAIL,email);
-                in.putExtra(MainActivity.PASS,password);
-                setResult(RESULT_OK,in);
-
-                finish();
-
-            }catch (Exception e){
-                Message msg = new Message();
-                msg.obj = e.getMessage();
-                handleToast.sendMessage(msg);
+                    return new Exception("This mail exists, you can't register by it another time");
+                else
+                    return new Exception("This phone is used before");
             }
+
+            Intent in = new Intent();
+            in.putExtra(MainActivity.EMAIL,email);
+            in.putExtra(MainActivity.PASS,password);
+            setResult(RESULT_OK,in);
+
+            finish();
+
             return null;
         }
 
 
         @Override
-        protected void onPostExecute(Void v) {
+        protected void onPostExecute(Exception e) {
             dialog.dismiss();
-            super.onPostExecute(v);
+            super.onPostExecute(e);
+            if(e == null)
+                Toast.makeText(RegisterActivity.this, "Registeration is done successfully", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

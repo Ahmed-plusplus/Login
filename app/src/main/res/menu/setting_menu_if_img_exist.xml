@@ -10,6 +10,10 @@
             <item android:id="@+id/choose_img"
                 android:title="@string/choose_img"
                 app:showAsAction="never"/>
+
+            <item android:id="@+id/remove_img"
+                android:title="@string/remove_img"
+                app:showAsAction="never"/>
         </menu>
     </item>
 

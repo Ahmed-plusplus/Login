@@ -1,9 +1,5 @@
 package com.helloworld.loginscreen.db;
 
-import android.graphics.Bitmap;
-
-import java.io.ByteArrayOutputStream;
-
 public class UserAuth {
 
     private int id;
@@ -39,6 +35,10 @@ public class UserAuth {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public String getMail() {
