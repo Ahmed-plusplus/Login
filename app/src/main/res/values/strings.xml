@@ -25,4 +25,9 @@
     <string name="logout">Logout</string>
     <string name="nav_drawer_open">Open navigation drawer</string>
     <string name="nav_drawer_close">Close navigation drawer</string>
+    <string name="current_pass">Current password</string>
+    <string name="new_pass">New password</string>
+    <string name="change">Change</string>
+    <string name="current_phone">Current phone</string>
+    <string name="new_phone">New Phone</string>
 </resources>

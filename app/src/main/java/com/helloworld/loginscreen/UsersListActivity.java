@@ -235,10 +235,10 @@ public class UsersListActivity extends AppCompatActivity implements NavigationVi
                 db.deleteImage(MainActivity.user.getId());
                 break;
             case R.id.change_pass:
-
+                startActivity(new Intent(UsersListActivity.this,ChangePasswordActivity.class));
                 break;
             case R.id.change_phone:
-
+                startActivity(new Intent(UsersListActivity.this,ChangePasswordActivity.class));
                 break;
             default: return false;
         }

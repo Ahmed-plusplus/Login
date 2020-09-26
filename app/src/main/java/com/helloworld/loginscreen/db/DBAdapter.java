@@ -109,15 +109,31 @@ public class DBAdapter {
     }
 
     public void updateImage(int id, byte[] img){
-        SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBHelper.COL_IMAGE,img);
-        String []idSelected = {id+""};
-        db.update(DBHelper.TABLE_NAME, contentValues, DBHelper.COL_UID + " LIKE ?", idSelected);
+        update(id,contentValues);
     }
 
     public void deleteImage(int id){
         updateImage(id,null);
+    }
+
+    public void updatePhone(int id, String phone) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBHelper.COL_PHONE,phone);
+        update(id,contentValues);
+    }
+
+    public void updatePass(int id, String pass) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBHelper.COL_PASSWORD,pass);
+        update(id,contentValues);
+    }
+
+    private void update(int id, ContentValues contentValues) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String []idSelected = {id+""};
+        db.update(DBHelper.TABLE_NAME, contentValues, DBHelper.COL_UID + " LIKE ?", idSelected);
     }
 
     public int deleteAccount(int id){

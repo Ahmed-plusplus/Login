@@ -32,31 +32,29 @@ public class UserDetails extends AppCompatActivity {
     DBAdapter db;
     ImageView img;
     TextView username;
-    FileInputStream fin;
     Bitmap bitmap_img;
-    FileOutputStream fos;
+    Thread thread;
+    Runnable runnable;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_details);
 
         init(savedInstanceState);
 
-        new Thread(new Runnable() {
+        runnable = new Runnable() {
             @Override
             public void run() {
-                if(savedInstanceState == null){
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Thread.sleep(3000);
                     startActivity(new Intent(UserDetails.this,UsersListActivity.class));
                     finish();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        }).start();
+        };
     }
 
     private void init(Bundle savedInstanceState) {
@@ -80,6 +78,19 @@ public class UserDetails extends AppCompatActivity {
         }
 
         username.setText(Html.fromHtml("Hello <b><i>"+MainActivity.user.getUsername()+"</i></b>"));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        thread = new Thread(runnable);
+        thread.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        thread.interrupt();
     }
 
     @Override

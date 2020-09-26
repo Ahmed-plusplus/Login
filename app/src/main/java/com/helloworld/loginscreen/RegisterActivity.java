@@ -156,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
         outState.putParcelable(MainActivity.IMAGE,bitmap);
     }
 
-    class WaitProgress extends AsyncTask<Void,Void,Exception>{
+    class WaitProgress extends AsyncTask<Void,Void,String>{
 
         AlertDialog.Builder alertBuilder;
         AlertDialog dialog;
@@ -178,7 +178,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Exception doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids) {
             String username,phone_num,email,password;
             username = name.getText().toString();
             phone_num = phone.getText().toString();
@@ -186,16 +186,16 @@ public class RegisterActivity extends AppCompatActivity {
             password = pass.getText().toString();
 
             if(username.isEmpty() || email.isEmpty() || password.isEmpty() || phone_num.isEmpty())
-                return new Exception("Fill the empty fields");
+                return "Fill the empty fields";
 
             if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-                return new Exception("Invalid mail");
+                return "Invalid mail";
 
             if(password.length()<6 || password.length()>20)
-                return new Exception("The password must have length from 6 to 20");
+                return "The password must have length from 6 to 20";
 
             if(!(male.isChecked() || female.isChecked()) || !accept.isChecked())
-                return new Exception("The required data isn't completed");
+                return "The required data isn't completed";
 
             UserAuth user;
 
@@ -206,9 +206,9 @@ public class RegisterActivity extends AppCompatActivity {
 
             if (db.addUser(user) <= 0){
                 if(db.getUser(email)!=null)
-                    return new Exception("This mail exists, you can't register by it another time");
+                    return "This mail exists, you can't register by it another time";
                 else
-                    return new Exception("This phone is used before");
+                    return "This phone is used before";
             }
 
             Intent in = new Intent();
@@ -218,18 +218,15 @@ public class RegisterActivity extends AppCompatActivity {
 
             finish();
 
-            return null;
+            return "Registeration is done successfully";
         }
 
 
         @Override
-        protected void onPostExecute(Exception e) {
+        protected void onPostExecute(String msg) {
             dialog.dismiss();
-            super.onPostExecute(e);
-            if(e == null)
-                Toast.makeText(RegisterActivity.this, "Registeration is done successfully", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
+            super.onPostExecute(msg);
         }
     }
 
